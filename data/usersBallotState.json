@@ -1,0 +1,652 @@
+[
+    {
+      "0": {
+        "voteOption": "2",
+        "voteWeight": "5"
+      },
+      "1": {
+        "voteOption": "1",
+        "voteWeight": "5"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "1",
+        "voteWeight": "9"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "20",
+        "voteWeight": "9"
+      },
+      "1": {
+        "voteOption": "6",
+        "voteWeight": "3"
+      },
+      "2": {
+        "voteOption": "7",
+        "voteWeight": "2"
+      },
+      "3": {
+        "voteOption": "3",
+        "voteWeight": "1"
+      },
+      "4": {
+        "voteOption": "2",
+        "voteWeight": "1"
+      },
+      "5": {
+        "voteOption": "5",
+        "voteWeight": "1"
+      },
+      "6": {
+        "voteOption": "8",
+        "voteWeight": "1"
+      },
+      "7": {
+        "voteOption": "12",
+        "voteWeight": "1"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "6",
+        "voteWeight": "8"
+      },
+      "1": {
+        "voteOption": "1",
+        "voteWeight": "3"
+      },
+      "2": {
+        "voteOption": "5",
+        "voteWeight": "2"
+      },
+      "3": {
+        "voteOption": "20",
+        "voteWeight": "3"
+      },
+      "4": {
+        "voteOption": "11",
+        "voteWeight": "1"
+      },
+      "5": {
+        "voteOption": "7",
+        "voteWeight": "2"
+      },
+      "6": {
+        "voteOption": "3",
+        "voteWeight": "2"
+      },
+      "7": {
+        "voteOption": "13",
+        "voteWeight": "2"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "3",
+        "voteWeight": "9"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "7",
+        "voteWeight": "7"
+      },
+      "1": {
+        "voteOption": "9",
+        "voteWeight": "7"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "7",
+        "voteWeight": "9"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "7",
+        "voteWeight": "9"
+      },
+      "1": {
+        "voteOption": "14",
+        "voteWeight": "4"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "9",
+        "voteWeight": "9"
+      },
+      "1": {
+        "voteOption": "6",
+        "voteWeight": "2"
+      },
+      "2": {
+        "voteOption": "13",
+        "voteWeight": "2"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "9",
+        "voteWeight": "9"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "4",
+        "voteWeight": "3"
+      },
+      "1": {
+        "voteOption": "14",
+        "voteWeight": "4"
+      },
+      "2": {
+        "voteOption": "7",
+        "voteWeight": "8"
+      },
+      "3": {
+        "voteOption": "6",
+        "voteWeight": "3"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "10",
+        "voteWeight": "9"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "9",
+        "voteWeight": "9"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "7",
+        "voteWeight": "9"
+      },
+      "1": {
+        "voteOption": "3",
+        "voteWeight": "4"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "5",
+        "voteWeight": "7"
+      },
+      "1": {
+        "voteOption": "6",
+        "voteWeight": "7"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "5",
+        "voteWeight": "7"
+      },
+      "1": {
+        "voteOption": "6",
+        "voteWeight": "7"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "6",
+        "voteWeight": "9"
+      },
+      "1": {
+        "voteOption": "1",
+        "voteWeight": "1"
+      },
+      "2": {
+        "voteOption": "22",
+        "voteWeight": "3"
+      },
+      "3": {
+        "voteOption": "2",
+        "voteWeight": "1"
+      },
+      "4": {
+        "voteOption": "3",
+        "voteWeight": "1"
+      },
+      "5": {
+        "voteOption": "9",
+        "voteWeight": "2"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "6",
+        "voteWeight": "7"
+      },
+      "1": {
+        "voteOption": "5",
+        "voteWeight": "7"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "3",
+        "voteWeight": "9"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "5",
+        "voteWeight": "7"
+      },
+      "1": {
+        "voteOption": "6",
+        "voteWeight": "7"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "1",
+        "voteWeight": "4"
+      },
+      "1": {
+        "voteOption": "20",
+        "voteWeight": "8"
+      },
+      "2": {
+        "voteOption": "7",
+        "voteWeight": "4"
+      },
+      "3": {
+        "voteOption": "4",
+        "voteWeight": "1"
+      },
+      "4": {
+        "voteOption": "8",
+        "voteWeight": "1"
+      },
+      "5": {
+        "voteOption": "6",
+        "voteWeight": "1"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "9",
+        "voteWeight": "9"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "6",
+        "voteWeight": "7"
+      },
+      "1": {
+        "voteOption": "5",
+        "voteWeight": "7"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "2",
+        "voteWeight": "9"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "7",
+        "voteWeight": "5"
+      },
+      "1": {
+        "voteOption": "5",
+        "voteWeight": "8"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "2",
+        "voteWeight": "4"
+      },
+      "1": {
+        "voteOption": "21",
+        "voteWeight": "3"
+      },
+      "2": {
+        "voteOption": "8",
+        "voteWeight": "3"
+      },
+      "3": {
+        "voteOption": "7",
+        "voteWeight": "8"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "18",
+        "voteWeight": "3"
+      },
+      "1": {
+        "voteOption": "2",
+        "voteWeight": "9"
+      },
+      "2": {
+        "voteOption": "7",
+        "voteWeight": "3"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "22",
+        "voteWeight": "9"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "3",
+        "voteWeight": "8"
+      },
+      "1": {
+        "voteOption": "7",
+        "voteWeight": "3"
+      },
+      "2": {
+        "voteOption": "6",
+        "voteWeight": "5"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "5",
+        "voteWeight": "4"
+      },
+      "1": {
+        "voteOption": "16",
+        "voteWeight": "8"
+      },
+      "2": {
+        "voteOption": "18",
+        "voteWeight": "4"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "16",
+        "voteWeight": "9"
+      },
+      "1": {
+        "voteOption": "10",
+        "voteWeight": "3"
+      },
+      "2": {
+        "voteOption": "2",
+        "voteWeight": "3"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "5",
+        "voteWeight": "8"
+      },
+      "1": {
+        "voteOption": "10",
+        "voteWeight": "5"
+      },
+      "2": {
+        "voteOption": "7",
+        "voteWeight": "3"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "11",
+        "voteWeight": "8"
+      },
+      "1": {
+        "voteOption": "15",
+        "voteWeight": "5"
+      },
+      "2": {
+        "voteOption": "9",
+        "voteWeight": "3"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "6",
+        "voteWeight": "5"
+      },
+      "1": {
+        "voteOption": "22",
+        "voteWeight": "7"
+      },
+      "2": {
+        "voteOption": "5",
+        "voteWeight": "5"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "14",
+        "voteWeight": "9"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "5",
+        "voteWeight": "3"
+      },
+      "1": {
+        "voteOption": "1",
+        "voteWeight": "1"
+      },
+      "2": {
+        "voteOption": "7",
+        "voteWeight": "3"
+      },
+      "3": {
+        "voteOption": "10",
+        "voteWeight": "8"
+      },
+      "4": {
+        "voteOption": "22",
+        "voteWeight": "4"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "12",
+        "voteWeight": "9"
+      },
+      "1": {
+        "voteOption": "6",
+        "voteWeight": "3"
+      },
+      "2": {
+        "voteOption": "7",
+        "voteWeight": "1"
+      },
+      "3": {
+        "voteOption": "2",
+        "voteWeight": "2"
+      },
+      "4": {
+        "voteOption": "9",
+        "voteWeight": "2"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "12",
+        "voteWeight": "9"
+      },
+      "1": {
+        "voteOption": "7",
+        "voteWeight": "3"
+      },
+      "2": {
+        "voteOption": "2",
+        "voteWeight": "3"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "7",
+        "voteWeight": "5"
+      },
+      "1": {
+        "voteOption": "15",
+        "voteWeight": "2"
+      },
+      "2": {
+        "voteOption": "11",
+        "voteWeight": "4"
+      },
+      "3": {
+        "voteOption": "9",
+        "voteWeight": "3"
+      },
+      "4": {
+        "voteOption": "6",
+        "voteWeight": "2"
+      },
+      "5": {
+        "voteOption": "14",
+        "voteWeight": "2"
+      },
+      "6": {
+        "voteOption": "17",
+        "voteWeight": "1"
+      },
+      "7": {
+        "voteOption": "19",
+        "voteWeight": "6"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "14",
+        "voteWeight": "9"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "1",
+        "voteWeight": "9"
+      },
+      "1": {
+        "voteOption": "2",
+        "voteWeight": "3"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "3",
+        "voteWeight": "9"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "5",
+        "voteWeight": "7"
+      },
+      "1": {
+        "voteOption": "6",
+        "voteWeight": "7"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "5",
+        "voteWeight": "7"
+      },
+      "1": {
+        "voteOption": "6",
+        "voteWeight": "7"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "6",
+        "voteWeight": "7"
+      },
+      "1": {
+        "voteOption": "5",
+        "voteWeight": "7"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "6",
+        "voteWeight": "5"
+      },
+      "1": {
+        "voteOption": "11",
+        "voteWeight": "5"
+      },
+      "2": {
+        "voteOption": "5",
+        "voteWeight": "5"
+      },
+      "3": {
+        "voteOption": "1",
+        "voteWeight": "4"
+      },
+      "4": {
+        "voteOption": "2",
+        "voteWeight": "2"
+      },
+      "5": {
+        "voteOption": "13",
+        "voteWeight": "2"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "4",
+        "voteWeight": "8"
+      },
+      "1": {
+        "voteOption": "2",
+        "voteWeight": "5"
+      },
+      "2": {
+        "voteOption": "3",
+        "voteWeight": "3"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "7",
+        "voteWeight": "1"
+      }
+    },
+    {
+      "0": {
+        "voteOption": "6",
+        "voteWeight": "5"
+      },
+      "1": {
+        "voteOption": "11",
+        "voteWeight": "5"
+      },
+      "2": {
+        "voteOption": "5",
+        "voteWeight": "5"
+      },
+      "3": {
+        "voteOption": "1",
+        "voteWeight": "4"
+      },
+      "4": {
+        "voteOption": "2",
+        "voteWeight": "2"
+      },
+      "5": {
+        "voteOption": "13",
+        "voteWeight": "2"
+      }
+    }
+  ]
