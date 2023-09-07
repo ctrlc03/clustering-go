@@ -17,6 +17,7 @@ type Vote struct {
 	VoteWeight string	 `json:"voteWeight"`
 }
 
+// parseData parses the data from the JSON file and returns a slice of Ballot objects
 func parseData(path string) []kmeans.Ballot {
 	jsonFile, err := os.Open(path)
 	if err != nil {
@@ -49,7 +50,8 @@ func parseData(path string) []kmeans.Ballot {
 
 func main() {
 	folder := "./data/"
-	outputFolder := "./data/output/"
+	outputFolderPlot := "./data/output/plots/"
+	outputFolderJson := "./data/output/json/"
 	files, err := listFilesInFolder(folder)
 	if err != nil {
 		panic(err)
@@ -66,7 +68,7 @@ func main() {
 			ballots := parseData(folder + filePath)
 			numOfProjects := kmeans.FindNumberOfProjects(ballots)
 
-			for iteration := 0; iteration < 100; iteration++ {
+			for iteration := 0; iteration < 1; iteration++ {
 				wg.Add(1)
 				go func(iter int) {
 					defer wg.Done()
@@ -77,24 +79,20 @@ func main() {
 					for i := 3; i < 20; i++ {
 						kmeansObj := kmeans.NewKMeans(i, ballots, numOfProjects, 100, 0.001)
 						kmeansObj.Train()
-						kmeansObj.CalculateWCSS()
-						kmeansObj.CalculateSilhouetteScore()
-						kmeansObj.CalculateDunnIndex()
-						kmeansObj.CalculateDaviesBouldinIndex()
 						wcss = append(wcss, kmeansObj.WCSS)
 						silouhtte = append(silouhtte, kmeansObj.SilhoutteScore)
 						dunnIndex = append(dunnIndex, kmeansObj.DunnIndex)
 						daviesBouldinIndex = append(daviesBouldinIndex, kmeansObj.DaviesBouldinIndex)
 
 						// Save the KMeans object to a JSON file
-						kmeansObj.WriteToFile(outputFolder + filePath + "_k_" + strconv.Itoa(i) + "_iteration_" + strconv.Itoa(iter) + ".json")
+						kmeansObj.WriteToFile(outputFolderJson + filePath + "_k_" + strconv.Itoa(i) + "_iteration_" + strconv.Itoa(iter) + ".json")
 					}
 
 					// Plot the results
-					plotting.PlotByWCSS(wcss, outputFolder + filePath + "_elbow_method_" + strconv.Itoa(iter) + ".png")
-					plotting.PlotByFeature(silouhtte, outputFolder + filePath + "_silhouette_score_" + strconv.Itoa(iter) + ".png", "Silhouette Score")
-					plotting.PlotByFeature(dunnIndex, outputFolder + filePath + "_dunn_index_" + strconv.Itoa(iter) + ".png", "Dunn Index")
-					plotting.PlotByFeature(daviesBouldinIndex, outputFolder + filePath + "_davies_bouldin_index_" + strconv.Itoa(iter) + ".png", "Davies Bouldin Index")
+					plotting.PlotByWCSS(wcss, outputFolderPlot + filePath + "_elbow_method_" + strconv.Itoa(iter) + ".png")
+					plotting.PlotByFeature(silouhtte, outputFolderPlot + filePath + "_silhouette_score_" + strconv.Itoa(iter) + ".png", "Silhouette Score")
+					plotting.PlotByFeature(dunnIndex, outputFolderPlot + filePath + "_dunn_index_" + strconv.Itoa(iter) + ".png", "Dunn Index")
+					plotting.PlotByFeature(daviesBouldinIndex, outputFolderPlot + filePath + "_davies_bouldin_index_" + strconv.Itoa(iter) + ".png", "Davies Bouldin Index")
 
 					fmt.Println("Completed file", filePath, "iteration", iter)
 				}(iteration)

@@ -1,12 +1,13 @@
 package kmeans
 
 import (
+	"encoding/json"
 	"fmt"
 	"math"
 	"math/rand"
-	"time"
-	"encoding/json"
 	"os"
+	"time"
+	"sync"
 )
 
 type Ballot struct {
@@ -14,48 +15,83 @@ type Ballot struct {
 }
 
 type Vote struct {
-	VoteOption int	 `json:"voteOption"`
-	VoteWeight float64	 `json:"voteWeight"`
+	VoteOption int     `json:"voteOption"`
+	VoteWeight float64 `json:"voteWeight"`
 }
 
 type VotersCoefficients struct {
-	VoterIndex int64
-	ClusterIndex int8 
-	Coefficient float64 
+	VoterIndex   int64
+	ClusterIndex int8
+	Coefficient  float64
 }
 
 type Coefficient struct {
 	ClusterIndex int8
-	Coefficient float64
+	Coefficient  float64
 }
 
-// KMeans is the main structure 
+// KMenasJSON is the JSON structure which is a subset of KMeans
+type KMeansJSON struct {
+	K                                  int                  `json:"k"`
+	Projects                           int                  `json:"projects"`
+	ClustersSize                       []int32              `json:"clusters_size"`
+	VotersCoefficientsLargerGroups     []VotersCoefficients `json:"voters_coefficients_larger_groups"`
+	VotersCoefficientsSmallerGroups    []VotersCoefficients `json:"voters_coefficients_smaller_groups"`
+	TraditionalQFs                     []float64            `json:"traditional_qfs"`
+	HasConverged                       bool                 `json:"has_converged"`
+	WCSS                               float64              `json:"wcss"`
+	SilhoutteScore                     float64              `json:"silhoutte_score"`
+	DunnIndex                          float64              `json:"dunn_index"`
+	DaviesBouldinIndex                 float64              `json:"davies_bouldin_index"`
+	CoefficientsSmallerGroups          []Coefficient        `json:"coefficients_smaller_groups"`
+	CoefficientsLargerGroups           []Coefficient        `json:"coefficients_larger_groups"`
+	QFSquareBeforeSmallerGroups        []float64            `json:"qf_square_before_smaller_groups"`
+	QFSquareBeforeLargerGroups         []float64            `json:"qf_square_before_larger_groups"`
+	QFSquareAfterSmallerGroups         []float64            `json:"qf_square_after_smaller_groups"`
+	QFSquareAfterLargerGroups          []float64            `json:"qf_square_after_larger_groups"`
+	PenaltiesSquareBeforeSmallerGroups []float64            `json:"penalties_square_before_smaller_groups"`
+	PenaltiesSquareBeforeLargerGroups  []float64            `json:"penalties_square_before_larger_groups"`
+	PenaltiesSquareAfterSmallerGroups  []float64            `json:"penalties_square_after_smaller_groups"`
+	PenaltiesSquareAfterLargerGroups   []float64            `json:"penalties_square_after_larger_groups"`
+}
+
+// KMeans is the main structure
 type KMeans struct {
-	K int 									`json:"k"`
-	Projects int							`json:"projects"`	
-	Ballots []Ballot						`json:"ballots"`
-	Vectors [][]float64						`json:"vectors"`
-	InitialCentroids [][]float64			`json:"initial_centroids"`
-	Centroids [][]float64					`json:"centroids"`
-	PreviousCentroids [][]float64			`json:"previous_centroids"`
-	Assignments []int8						`json:"assignments"`
-	ClustersSize []int32					`json:"clusters_size"`
-	Coefficients []Coefficient				`json:"coefficients"`
-	VotersCoefficients []VotersCoefficients	`json:"voters_coefficients"`
-	TraditionalQFs []float64				`json:"traditional_qfs"`
-	Tolerance float64						`json:"tolerance"`
-	HasConverged bool 						`json:"has_converged"`
-	MaxIterations int						`json:"max_iterations"` 
-	Voters int 								`json:"voters"`
-	WCSS float64							`json:"wcss"`
-	SilhoutteScore float64					`json:"silhoutte_score"`
-	Distances []float64						`json:"distances"`
-	DunnIndex float64 						`json:"dunn_index"`
-	DaviesBouldinIndex float64				`json:"davies_bouldin_index"`
-} 
+	K                                  int                  `json:"k"`
+	Projects                           int                  `json:"projects"`
+	Ballots                            []Ballot             `json:"ballots"`
+	Vectors                            [][]float64          `json:"vectors"`
+	InitialCentroids                   [][]float64          `json:"initial_centroids"`
+	Centroids                          [][]float64          `json:"centroids"`
+	PreviousCentroids                  [][]float64          `json:"previous_centroids"`
+	Assignments                        []int8               `json:"assignments"`
+	ClustersSize                       []int32              `json:"clusters_size"`
+	VotersCoefficientsLargerGroups     []VotersCoefficients `json:"voters_coefficients_larger_groups"`
+	VotersCoefficientsSmallerGroups    []VotersCoefficients `json:"voters_coefficients_smaller_groups"`
+	TraditionalQFs                     []float64            `json:"traditional_qfs"`
+	Tolerance                          float64              `json:"tolerance"`
+	HasConverged                       bool                 `json:"has_converged"`
+	MaxIterations                      int                  `json:"max_iterations"`
+	Voters                             int                  `json:"voters"`
+	WCSS                               float64              `json:"wcss"`
+	SilhoutteScore                     float64              `json:"silhoutte_score"`
+	Distances                          []float64            `json:"distances"`
+	DunnIndex                          float64              `json:"dunn_index"`
+	DaviesBouldinIndex                 float64              `json:"davies_bouldin_index"`
+	CoefficientsSmallerGroups          []Coefficient        `json:"coefficients_smaller_groups"`
+	CoefficientsLargerGroups           []Coefficient        `json:"coefficients_larger_groups"`
+	QFSquareBeforeSmallerGroups        []float64            `json:"qf_square_before_smaller_groups"`
+	QFSquareBeforeLargerGroups         []float64            `json:"qf_square_before_larger_groups"`
+	QFSquareAfterSmallerGroups         []float64            `json:"qf_square_after_smaller_groups"`
+	QFSquareAfterLargerGroups          []float64            `json:"qf_square_after_larger_groups"`
+	PenaltiesSquareBeforeSmallerGroups []float64            `json:"penalties_square_before_smaller_groups"`
+	PenaltiesSquareBeforeLargerGroups  []float64            `json:"penalties_square_before_larger_groups"`
+	PenaltiesSquareAfterSmallerGroups  []float64            `json:"penalties_square_after_smaller_groups"`
+	PenaltiesSquareAfterLargerGroups   []float64            `json:"penalties_square_after_larger_groups"`
+}
 
 // Init initializes the KMeans object
-func NewKMeans(k int, ballots []Ballot, projects int, maxIterations int, tolerance float64) *KMeans{
+func NewKMeans(k int, ballots []Ballot, projects int, maxIterations int, tolerance float64) *KMeans {
 	fmt.Sprintf("Init KMeans with k=%d", k)
 
 	kmeans := &KMeans{}
@@ -68,10 +104,10 @@ func NewKMeans(k int, ballots []Ballot, projects int, maxIterations int, toleran
 	kmeans.AddZeroVotesToBallots()
 	kmeans.ConvertBallotsToWeights()
 	kmeans.Voters = len(kmeans.Vectors)
-	return kmeans 
+	return kmeans
 }
 
-/// Train trains the KMeans object
+// / Train trains the KMeans object
 func (kmeans *KMeans) Train() {
 	kmeans.CalculateInitialCentroidsCosine()
 	kmeans.CalculateTraditionalQF()
@@ -81,13 +117,50 @@ func (kmeans *KMeans) Train() {
 		kmeans.UpdateCentroids()
 		kmeans.CheckConvergenceCosine()
 
-		if (kmeans.HasConverged) {
-			break 
+		if kmeans.HasConverged {
+			break
 		}
 	}
 
+	// run the benchmarks
 	kmeans.CalculateClustersSize()
-	kmeans.AssignVotersCoefficient()	
+	kmeans.CalculateSilhouetteScore()
+	kmeans.CalculateDunnIndex()
+	kmeans.CalculateDaviesBouldinIndex()
+	kmeans.CalculateWCSS()
+
+	// calculate and assign the coefficients
+	kmeans.CalculateCoefficientsSmallerGroups()
+	kmeans.CalculateCoefficientsLargerGroups()
+	kmeans.AssignVotersCoefficient()
+
+	// calculate the QF per project using the different coefficients and calculation methods
+	var wg sync.WaitGroup
+
+    wg.Add(4)
+    go func() {
+        defer wg.Done()
+        kmeans.QFSquareAfterLargerGroups = kmeans.CalculateQFPerProjectSquareAfterCoefficient(kmeans.VotersCoefficientsLargerGroups)
+    }()
+    go func() {
+        defer wg.Done()
+        kmeans.QFSquareAfterSmallerGroups = kmeans.CalculateQFPerProjectSquareAfterCoefficient(kmeans.VotersCoefficientsSmallerGroups)
+    }()
+    go func() {
+        defer wg.Done()
+        kmeans.QFSquareBeforeLargerGroups = kmeans.CalculateQFPerProjectSquareBeforeCoefficient(kmeans.VotersCoefficientsLargerGroups)
+    }()
+    go func() {
+        defer wg.Done()
+        kmeans.QFSquareBeforeSmallerGroups = kmeans.CalculateQFPerProjectSquareBeforeCoefficient(kmeans.VotersCoefficientsSmallerGroups)
+    }()
+    wg.Wait()
+
+	// calculate the penalties
+	kmeans.PenaltiesSquareAfterLargerGroups = kmeans.CalculateDifferenceBetweenKMeansAndtraditional(kmeans.QFSquareAfterLargerGroups)
+	kmeans.PenaltiesSquareAfterSmallerGroups = kmeans.CalculateDifferenceBetweenKMeansAndtraditional(kmeans.QFSquareAfterSmallerGroups)
+	kmeans.PenaltiesSquareBeforeLargerGroups = kmeans.CalculateDifferenceBetweenKMeansAndtraditional(kmeans.QFSquareBeforeLargerGroups)
+	kmeans.PenaltiesSquareBeforeSmallerGroups = kmeans.CalculateDifferenceBetweenKMeansAndtraditional(kmeans.QFSquareBeforeSmallerGroups)
 }
 
 // ExtractZeroVotes extracts the zero votes from the ballots
@@ -131,22 +204,47 @@ func (kmeans *KMeans) WriteToFile(path string) {
 	}
 	defer file.Close()
 
-	encoder := json.NewEncoder(file)
-	// marshal the data into a JSON string and write to a file 
-	err = encoder.Encode(kmeans)
+	kmeansJSON := KMeansJSON{
+		K:                                  kmeans.K,
+		Projects:                           kmeans.Projects,
+		ClustersSize:                       kmeans.ClustersSize,
+		VotersCoefficientsLargerGroups:     kmeans.VotersCoefficientsLargerGroups,
+		VotersCoefficientsSmallerGroups:    kmeans.VotersCoefficientsSmallerGroups,
+		TraditionalQFs:                     kmeans.TraditionalQFs,
+		HasConverged:                       kmeans.HasConverged,
+		WCSS:                               kmeans.WCSS,
+		SilhoutteScore:                     kmeans.SilhoutteScore,
+		DunnIndex:                          kmeans.DunnIndex,
+		DaviesBouldinIndex:                 kmeans.DaviesBouldinIndex,
+		CoefficientsSmallerGroups:          kmeans.CoefficientsSmallerGroups,
+		CoefficientsLargerGroups:           kmeans.CoefficientsLargerGroups,
+		QFSquareBeforeSmallerGroups:        kmeans.QFSquareBeforeSmallerGroups,
+		QFSquareBeforeLargerGroups:         kmeans.QFSquareBeforeLargerGroups,
+		QFSquareAfterSmallerGroups:         kmeans.QFSquareAfterSmallerGroups,
+		QFSquareAfterLargerGroups:          kmeans.QFSquareAfterLargerGroups,
+		PenaltiesSquareBeforeSmallerGroups: kmeans.PenaltiesSquareBeforeSmallerGroups,
+		PenaltiesSquareBeforeLargerGroups:  kmeans.PenaltiesSquareBeforeLargerGroups,
+		PenaltiesSquareAfterSmallerGroups:  kmeans.PenaltiesSquareAfterSmallerGroups,
+		PenaltiesSquareAfterLargerGroups:   kmeans.PenaltiesSquareAfterLargerGroups,
+	}
+
+	jsonData, err := json.MarshalIndent(kmeansJSON, "", "	")
+	if err != nil {
+		fmt.Println("Error marshalling JSON:", err)
+		return
+	}
+
+	// marshal the data into a JSON string and write to a file
+	_, err = file.Write(jsonData)
 	if err != nil {
 		fmt.Println("Error encoding JSON:", err)
 		return
 	}
 }
 
-/// CalculateCosineSimilarity calculate the cosine similarity between two vectors
+// CalculateCosineSimilarity calculate the cosine similarity between two vectors
 func CalculateCosineSimilarity(vector1 []float64, vector2 []float64) float64 {
-	if vector1 == nil || vector2 == nil {
-		return 0
-	}
-
-	if len(vector1) != len(vector2) {
+	if vector1 == nil || vector2 == nil || len(vector1) != len(vector2) {
 		return 0
 	}
 
@@ -156,20 +254,21 @@ func CalculateCosineSimilarity(vector1 []float64, vector2 []float64) float64 {
 
 	for i := 0; i < len(vector1); i++ {
 		dotProduct += vector1[i] * vector2[i]
-		magnitude1 += vector1[i] * vector1[i]
-		magnitude2 += vector2[i] * vector2[i]
+		magnitude1 += math.Pow(vector1[i], 2)
+		magnitude2 += math.Pow(vector2[i], 2)
 	}
 
-	if magnitude1 == 0 || magnitude2 == 0 {
+	magnitude := math.Sqrt(magnitude1) * math.Sqrt(magnitude2)
+	if magnitude == 0 {
 		return 0
 	}
 
-	return dotProduct / (math.Sqrt(magnitude1) * math.Sqrt(magnitude2))
+	return dotProduct / magnitude 
 }
 
 // CalculateCosineDistance the cosine distance between the weights and the centroids
 func CalculateCosineDistance(weights [][]float64, centroids [][]float64) []float64 {
-	var distances []float64
+	distances := make([]float64, 0, len(weights))
 
 	for _, weight := range weights {
 		maxDistance := -1.0
@@ -184,10 +283,10 @@ func CalculateCosineDistance(weights [][]float64, centroids [][]float64) []float
 		distances = append(distances, maxDistance)
 	}
 
-	return distances 
+	return distances
 }
 
-/// calculateRandomNumberNotIncluded calculates a random number between 0 and edge
+// calculateRandomNumberNotIncluded calculates a random number between 0 and edge
 func calculateRandomNumberNotIncluded(edge int) int {
 	rand.Seed(time.Now().UnixNano())
 	randomNumber := rand.Intn(int(edge))
@@ -195,7 +294,7 @@ func calculateRandomNumberNotIncluded(edge int) int {
 	return randomNumber
 }
 
-/// sliceEqual compare two slices to check if they are the same
+// sliceEqual compare two slices to check if they are the same
 func sliceEqual(a, b []float64) bool {
 	if len(a) != len(b) {
 		return false
@@ -209,7 +308,7 @@ func sliceEqual(a, b []float64) bool {
 	return true
 }
 
-/// containsSlice check if a 2D slice contains a 1D slice
+// / containsSlice check if a 2D slice contains a 1D slice
 func containsSlice(twoDSlice [][]float64, oneDSlice []float64) bool {
 	for _, slice := range twoDSlice {
 		if sliceEqual(slice, oneDSlice) {
@@ -220,7 +319,7 @@ func containsSlice(twoDSlice [][]float64, oneDSlice []float64) bool {
 	return false
 }
 
-/// sumUpSlice sums up all the values in a slice
+// / sumUpSlice sums up all the values in a slice
 func sumUpSlice(slice []float64) float64 {
 	var sum float64 = 0
 	for _, value := range slice {
@@ -232,10 +331,10 @@ func sumUpSlice(slice []float64) float64 {
 
 // ConvertBallotsToWeights converts the ballots to a 2D slice of weights
 func (kmeans *KMeans) ConvertBallotsToWeights() {
-	var weights [][]float64
+	weights := make([][]float64, 0, len(kmeans.Ballots))
 
 	for _, ballot := range kmeans.Ballots {
-		var weight []float64
+		weight := make([]float64, 0, len(ballot.Votes))
 		for _, vote := range ballot.Votes {
 			weight = append(weight, vote.VoteWeight)
 		}
@@ -260,14 +359,14 @@ func FindNumberOfProjects(ballots []Ballot) int {
 	return largestVoteIndex
 }
 
-/// @dev select the next centroid with a probability proportional to distance
+// / @dev select the next centroid with a probability proportional to distance
 func (kmeans KMeans) selectNextCentroid(distancesOrSimilarities []float64) []float64 {
 	sum := sumUpSlice(distancesOrSimilarities)
 
 	// calculate the probabilities
-	var probabilities []float64
+	probabilities := make([]float64, 0, len(distancesOrSimilarities))
 	for _, distance := range distancesOrSimilarities {
-		probabilities = append(probabilities, distance / sum)
+		probabilities = append(probabilities, distance/sum)
 	}
 
 	// generate a random number between 0 and 1
@@ -282,14 +381,14 @@ func (kmeans KMeans) selectNextCentroid(distancesOrSimilarities []float64) []flo
 	}
 
 	// fallback (return the last one)
-	return kmeans.Vectors[len(kmeans.Vectors) - 1]
+	return kmeans.Vectors[len(kmeans.Vectors)-1]
 }
 
-/// CalculateInitialCentroidsCosine calculates the initial centroids using the cosine distance 
+/// CalculateInitialCentroidsCosine calculates the initial centroids using the cosine distance
 func (kmeans *KMeans) CalculateInitialCentroidsCosine() {
 	var centroids [][]float64
 
-	// select the first random 
+	// select the first random
 	centroids = append(centroids, kmeans.Vectors[calculateRandomNumberNotIncluded((len(kmeans.Vectors)))])
 
 	// while the number of centroids is less than k
@@ -309,56 +408,50 @@ func (kmeans *KMeans) CalculateInitialCentroidsCosine() {
 	kmeans.Centroids = centroids
 }
 
-/// AssignVotesToClusterCosine assigns ballots to a cluster using the cosine distance
+// AssignVotesToClusterCosine assigns ballots to a cluster using the cosine distance
 func (kmeans *KMeans) AssignVotesToClusterCosine() {
+	assignments := make([]int8, len(kmeans.Vectors))
+	distances := make([]float64, len(kmeans.Vectors))
 
-	var assignments []int8
-	var distances []float64
-
-	for _, vector := range kmeans.Vectors {
+	for i, vector := range kmeans.Vectors {
 		minDistance := math.Inf(1)
 		clusterIndex := -1
 
 		for index, centroid := range kmeans.Centroids {
-			// we can break out early if the vote is the same as the centroid
 			if sliceEqual(vector, centroid) {
 				clusterIndex = index
-				break 
+				break
 			}
 
-			// calculate the distance 
 			distance := 1 - CalculateCosineSimilarity(vector, centroid)
-
-			// compare
-			if (distance < minDistance) {
+			if distance < minDistance {
 				minDistance = distance
 				clusterIndex = index
 			}
-
 		}
 
-		assignments = append(assignments, int8(clusterIndex))
+		assignments[i] = int8(clusterIndex)
 		if minDistance == math.Inf(1) {
-			distances = append(distances, 0)
+			distances[i] = 0
 		} else {
-			distances = append(distances, minDistance) 
+			distances[i] = minDistance
 		}
 	}
 
-
-
-	// store 
 	kmeans.Assignments = assignments
 	kmeans.Distances = distances
 }
 
+
 // UpdateCentroids updates the centroids using the cosine distance
 func (kmeans *KMeans) UpdateCentroids() {
-	var newCentroids [][]float64
+	newCentroids := make([][]float64, kmeans.K)
+
 	// loop through our clusters
-	for index:= 0; index < kmeans.K; index++ {
+	for index := 0; index < kmeans.K; index++ {
 		// get the votes for this cluster
-		var votes [][]float64
+		// Preallocate votes with an educated guess of its size
+		votes := make([][]float64, 0, len(kmeans.Vectors)/kmeans.K)
 		for i, assignment := range kmeans.Assignments {
 			if int8(index) == assignment {
 				votes = append(votes, kmeans.Vectors[i])
@@ -367,7 +460,7 @@ func (kmeans *KMeans) UpdateCentroids() {
 
 		// a cluster might not have any votes
 		if len(votes) == 0 {
-			continue 
+			continue
 		}
 
 		// store the tmp mean here
@@ -383,8 +476,8 @@ func (kmeans *KMeans) UpdateCentroids() {
 			tmpMean[i] = sum / float64(len(votes))
 		}
 
-		newCentroids = append(newCentroids, tmpMean)
-	}  
+		newCentroids[index] = tmpMean
+	}
 
 	// store the previous centroids so we can check for convergence
 	kmeans.PreviousCentroids = kmeans.Centroids
@@ -403,49 +496,84 @@ func (kmeans *KMeans) CalculateClustersSize() {
 	kmeans.ClustersSize = clusterSizes
 }
 
-// CalculateCoefficientsSmallerGroups calculates the coefficients with 
+// CalculateCoefficients calculates the coefficients for each cluster
+// formula: clusterSize / number of ballots
+// rewarding larger groups
+func (kmeans *KMeans) CalculateCoefficientsLargerGroups() {
+	coefficients := make([]Coefficient, len(kmeans.Centroids))
+	// loop through all the clusters
+	for index, clusterSize := range kmeans.ClustersSize {
+		var coefficient float64
+		if clusterSize != 0 {
+			coefficient = float64(clusterSize) / float64(len(kmeans.Vectors))
+		} else {
+			coefficient = 1
+		}
+		coefficients[index] = Coefficient{ClusterIndex: int8(index), Coefficient: coefficient}
+	}
+	kmeans.CoefficientsLargerGroups = coefficients
+}
+
+// CalculateCoefficientsSmallerGroups calculates the coefficients with
 // the formula to reward smaller groups
 func (kmeans *KMeans) CalculateCoefficientsSmallerGroups() {
-	var coefficients []Coefficient
+	coefficients := make([]Coefficient, len(kmeans.Centroids))
 
 	// loop through all clusters
 	for index, clusterSize := range kmeans.ClustersSize {
-		var coefficient float64 
+		var coefficient float64
 		if clusterSize != 0 {
-			coefficient = 1 - float64(clusterSize) / float64(len(kmeans.Vectors))
+			coefficient = 1 - float64(clusterSize)/float64(len(kmeans.Vectors))
 		} else {
-			coefficient  = 0
+			coefficient = 1
 		}
 
-		coefficients = append(coefficients, Coefficient{ClusterIndex: int8(index), Coefficient: coefficient})
+		coefficients[index] = Coefficient{ClusterIndex: int8(index), Coefficient: coefficient}
 	}
 
-	kmeans.Coefficients = coefficients
+	kmeans.CoefficientsSmallerGroups = coefficients
 }
 
 // AssignVotersCoefficient assigns each user to their cluster and coefficient
 func (kmeans *KMeans) AssignVotersCoefficient() {
-	var votersCoefficients []VotersCoefficients
+	votersCoefficientsSmallerGroups := make([]VotersCoefficients, 0, len(kmeans.Assignments))
+	votersCoefficientsLargerGroups := make([]VotersCoefficients, 0, len(kmeans.Assignments))
 
 	for index, assignment := range kmeans.Assignments {
-		var coeff float64 = 1 // default value
+		var coeffLarger float64 = 1  // default value
+		var coeffSmaller float64 = 1 // default
 
-		// Find the corresponding coefficient
-		for _, c := range kmeans.Coefficients {
-			if c.ClusterIndex == assignment {
-				coeff = c.Coefficient
+		// Find the corresponding coefficients
+		for _, cs := range kmeans.CoefficientsSmallerGroups {
+			if cs.ClusterIndex == assignment {
+				coeffSmaller = cs.Coefficient
 				break
 			}
 		}
 
-		votersCoefficients = append(votersCoefficients, VotersCoefficients{
-			VoterIndex: int64(index),
+		for _, cl := range kmeans.CoefficientsLargerGroups {
+			if cl.ClusterIndex == assignment {
+				coeffLarger = cl.Coefficient
+				break
+			}
+		}
+
+		votersCoefficientsSmallerGroups = append(votersCoefficientsSmallerGroups, VotersCoefficients{
+			VoterIndex:   int64(index),
 			ClusterIndex: assignment,
-			Coefficient: coeff,
+			Coefficient:  coeffSmaller,
+		})
+
+		votersCoefficientsLargerGroups = append(votersCoefficientsLargerGroups, VotersCoefficients{
+			VoterIndex:   int64(index),
+			ClusterIndex: assignment,
+			Coefficient:  coeffLarger,
 		})
 	}
 
-	kmeans.VotersCoefficients = votersCoefficients
+	// store
+	kmeans.VotersCoefficientsLargerGroups = votersCoefficientsLargerGroups
+	kmeans.VotersCoefficientsSmallerGroups = votersCoefficientsSmallerGroups
 }
 
 // CalculateTraditionalQF calculates the traditional QF
@@ -466,20 +594,19 @@ func (kmeans *KMeans) CalculateTraditionalQF() {
 // CheckConvergenceCosine checks if the centroids have converged based on cosine similarity
 func (kmeans *KMeans) CheckConvergenceCosine() {
 	// by default we have converged
-	kmeans.HasConverged = true  
+	kmeans.HasConverged = true
 
 	if len(kmeans.PreviousCentroids) != len(kmeans.Centroids) || len(kmeans.PreviousCentroids[0]) != len(kmeans.Centroids[0]) {
-		kmeans.HasConverged = false 
-		return 
+		kmeans.HasConverged = false
+		return
 	}
 
-
-	// loop through all centroids 
+	// loop through all centroids
 	for index, centroid := range kmeans.Centroids {
 		distance := 1 - CalculateCosineSimilarity(centroid, kmeans.PreviousCentroids[index])
 		if distance > kmeans.Tolerance {
-			kmeans.HasConverged = false 
-			return 
+			kmeans.HasConverged = false
+			return
 		}
 	}
 }
@@ -491,8 +618,8 @@ func (kmeans *KMeans) CalculateWCSS() {
 		distance := kmeans.Distances[i]
 		wcss += math.Pow(distance, 2)
 	}
-	
-	kmeans.WCSS = wcss 
+
+	kmeans.WCSS = wcss
 }
 
 // CalculateSilhouetteScore calculates the silhouette score for the clusters
@@ -631,4 +758,53 @@ func (kmeans *KMeans) CalculateDaviesBouldinIndex() {
 	}
 
 	kmeans.DaviesBouldinIndex = sumRatios / float64(len(kmeans.Centroids))
+}
+
+// CalculateQFPerProjectSquareAfterCoefficient calculates the matching amount per project based on the votes and the coefficients
+func (kmeans KMeans) CalculateQFPerProjectSquareAfterCoefficient(coefficients []VotersCoefficients) []float64 {
+	qfs := make([]float64, kmeans.Projects)
+
+	// loop through the projects
+	for i := 0; i < kmeans.Projects; i++ {
+		// interim sum
+		var sum float64 = 0
+
+		// loop through votes array
+		for index, ballot := range kmeans.Vectors {
+			sum += math.Sqrt(ballot[i] * float64(coefficients[index].Coefficient))
+		}
+		qfs[i] = math.Pow(sum, 2)
+	}
+
+	return qfs
+}
+
+// CalculateQFPerProjectSquareBeforeCoefficient calculates the matching amount per project based on the votes and the coefficients. The coefficients are applied after sqrt(weight)
+func (kmeans *KMeans) CalculateQFPerProjectSquareBeforeCoefficient(coefficients []VotersCoefficients) []float64 {
+	qfs := make([]float64, kmeans.Projects)
+
+	// loop through the projects
+	for i := 0; i < kmeans.Projects; i++ {
+		// interim sum
+		var sum float64 = 0
+		// loop through votes array
+		for index, ballot := range kmeans.Vectors {
+			sum += math.Sqrt(ballot[i]) * float64(coefficients[index].Coefficient)
+		}
+		qfs[i] = math.Pow(sum, 2)
+	}
+
+	return qfs
+}
+
+// CalculateDifferenceBetweenKMeansAndtraditional calculates how much a project has been penalized
+func (kmeans *KMeans) CalculateDifferenceBetweenKMeansAndtraditional(qfs []float64) []float64 {
+	penalties := make([]float64, kmeans.Projects)
+
+	// loop through the projects
+	for i := 0; i < kmeans.Projects; i++ {
+		// calculate the difference between the two QFs
+		penalties[i] = kmeans.TraditionalQFs[i]-qfs[i]
+	}
+	return penalties
 }
