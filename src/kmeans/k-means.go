@@ -576,21 +576,6 @@ func (kmeans *KMeans) AssignVotersCoefficient() {
 	kmeans.VotersCoefficientsSmallerGroups = votersCoefficientsSmallerGroups
 }
 
-// CalculateTraditionalQF calculates the traditional QF
-func (kmeans *KMeans) CalculateTraditionalQF() {
-	traditionalQFs := make([]float64, kmeans.Projects)
-
-	for projectIndex := 0; projectIndex < kmeans.Projects; projectIndex++ {
-		var sum float64 = 0
-		for index := 0; index < len(kmeans.Vectors); index++ {
-			sum += math.Sqrt(kmeans.Vectors[index][projectIndex])
-		}
-		traditionalQFs = append(traditionalQFs, math.Pow(sum, 2))
-	}
-
-	kmeans.TraditionalQFs = traditionalQFs
-}
-
 // CheckConvergenceCosine checks if the centroids have converged based on cosine similarity
 func (kmeans *KMeans) CheckConvergenceCosine() {
 	// by default we have converged
@@ -746,6 +731,10 @@ func (kmeans *KMeans) CalculateDaviesBouldinIndex() {
 		for j := range kmeans.Centroids {
 			if i != j {
 				distanceBetweenCentroids := 1 - CalculateCosineSimilarity(kmeans.Centroids[i], kmeans.Centroids[j])
+				// distance is zero so avoid division by zero
+				if distanceBetweenCentroids == 0 {
+					continue
+				}
 				ratio := (averageDistances[i] + averageDistances[j]) / distanceBetweenCentroids
 
 				if ratio > maxRatio {
@@ -795,6 +784,21 @@ func (kmeans *KMeans) CalculateQFPerProjectSquareBeforeCoefficient(coefficients 
 	}
 
 	return qfs
+}
+
+// CalculateTraditionalQF calculates the traditional QF
+func (kmeans *KMeans) CalculateTraditionalQF() {
+	traditionalQFs := make([]float64, 0, kmeans.Projects)
+
+	for projectIndex := 0; projectIndex < kmeans.Projects; projectIndex++ {
+		var sum float64 = 0
+		for index := 0; index < len(kmeans.Vectors); index++ {
+			sum += math.Sqrt(kmeans.Vectors[index][projectIndex])
+		}
+		traditionalQFs = append(traditionalQFs, math.Pow(sum, 2))
+	}
+
+	kmeans.TraditionalQFs = traditionalQFs
 }
 
 // CalculateDifferenceBetweenKMeansAndtraditional calculates how much a project has been penalized
