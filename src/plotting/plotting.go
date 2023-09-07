@@ -3,6 +3,7 @@ package plotting
 import (
 	"fmt"
 	"log"
+	"math"
 
 	"gonum.org/v1/plot"
 	"gonum.org/v1/plot/plotter"
@@ -31,6 +32,14 @@ func PlotByWCSS(wcss []float64, output string) {
 
 	p.Add(line)
 
+
+	p.X.Tick.Marker = plot.TickerFunc(func(min, max float64) []plot.Tick {
+		ticks := []plot.Tick{}
+		for i := math.Ceil(min); i <= max; i++ {
+			ticks = append(ticks, plot.Tick{Value: i, Label: fmt.Sprintf("%.0f", i)})
+		}
+		return ticks
+	})
 
 	if err := p.Save(10*vg.Inch, 4*vg.Inch, output); err != nil {
 		log.Fatalf("Error saving plot: %v", err)
